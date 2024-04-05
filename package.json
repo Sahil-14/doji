@@ -1,0 +1,23 @@
+{
+  "name": "doji",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "csv-parse": "^5.5.5",
+    "mysql2": "^3.9.2",
+    "nightwatch": "^3.5.0",
+    "node-cron": "^3.0.3",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "request-promise": "^4.2.6",
+    "sequelize": "^6.37.1",
+    "unirest": "^0.6.0"
+  }
+}
