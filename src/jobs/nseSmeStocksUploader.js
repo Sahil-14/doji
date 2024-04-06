@@ -2,7 +2,7 @@ const CSVToDB = require('../service/csvToDb');
 const path = require('path');
 const db = require("../models");
 const { parseCSV } = require('../utils/csv');
-const NseSMO = db.nse_smo;
+const NseSME = db.nse_sme;
 
 
 (async () => {
@@ -14,7 +14,7 @@ const NseSMO = db.nse_smo;
     const csvData = await parseCSV(csvFilePath);
     console.log(csvData.length)
     const csvToDBService = new CSVToDB();
-    await csvToDBService.insertNseStocksData(NseSMO, csvData, 100, "nse-sme"); // Insert data in batches of 100 records
+    await csvToDBService.insertNseStocksData(NseSME, csvData, 100, "nse-sme"); // Insert data in batches of 100 records
   } catch (error)
   {
     console.error('Error:', error);

@@ -27,8 +27,8 @@ db.bse.sync();
 db.nse = require("./nse.model.js")(sequelize, Sequelize);
 db.nse.sync()
 
-db.nse_smo = require("./nse_sme.model.js")(sequelize, Sequelize);
-db.nse_smo.sync()
+db.nse_sme = require("./nse_sme.model.js")(sequelize, Sequelize);
+db.nse_sme.sync()
 
 db.bse_trendlyne_mapping = require("./bse_trendlyne_mapping.model.js")(sequelize, Sequelize);
 db.bse_trendlyne_mapping.sync();
@@ -36,7 +36,8 @@ db.bse_trendlyne_mapping.sync();
 db.nse_trendlyne_mapping = require("./nse_trendlyne_mapping.model.js")(sequelize, Sequelize);
 db.nse_trendlyne_mapping.sync();
 
-
+db.nse_sme_trendlyne_mapping = require("./nse_sme_trendlyne_mapping.model.js")(sequelize, Sequelize);
+db.nse_sme_trendlyne_mapping.sync();
 
 
 module.exports = db;

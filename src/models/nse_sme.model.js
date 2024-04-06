@@ -1,6 +1,6 @@
 
 module.exports = (sequelize, Sequelize) => {
-  const NseSmo = sequelize.define("nse_smo", {
+  const NseSme = sequelize.define("nse_sme", {
     symbol: {
       primaryKey: true,
       type: Sequelize.STRING,
@@ -38,5 +38,5 @@ module.exports = (sequelize, Sequelize) => {
 
   });
 
-  return NseSmo;
+  return NseSme;
 };

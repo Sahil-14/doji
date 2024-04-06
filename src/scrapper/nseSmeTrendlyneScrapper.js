@@ -8,8 +8,8 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const db = require('../models');
 const WebScrapToDb = require("../service/webScrapToDb");
 const { StockIdScrappingError } = require("../error/StockIdScrappingError");
-const Nse = db.nse;
-const NseTrendlyneMapping = db.nse_trendlyne_mapping
+const NseSmo = db.nse_sme;
+const NseSmoTrendlyneMmapping = db.nse_sme_trendlyne_mapping
 
 /**
  * randomise delay
@@ -78,27 +78,27 @@ class NseTrendlyneScrapper extends Scrapper {
     let browser;
     var securities = [];
     var dataToInsert = [];
-    var nseToTrendlyneMappedSecurities = [];
+    var nseSmoToTrendlyneMappedSecurities = [];
     const webScrapToDb = new WebScrapToDb();
 
     //get bse security id from db
     try
     {
-      const nseEntries = await Nse.findAll({
+      const nseSmoEntries = await NseSmo.findAll({
         attributes: ['symbol', 'compony_name']
       });
 
-      if (!nseEntries)
+      if (!nseSmoEntries)
       {
-        console.log("No entries found in NSE table.")
+        console.log("No entries found in NSE SME table.")
         return;
       }
-      securities = nseEntries.map(entry => ({
+      securities = nseSmoEntries.map(entry => ({
         symbol: entry.symbol,
         componyName: entry.compony_name
       }));
 
-      console.log(`Total componies in NSE : ${securities.length}`);
+      console.log(`Total componies in NSE SME : ${securities.length}`);
     } catch (error)
     {
       console.error('Error while getting securities list');
@@ -108,16 +108,16 @@ class NseTrendlyneScrapper extends Scrapper {
 
     try
     {
-      const nseEntries = await NseTrendlyneMapping.findAll({
+      const nseSmoEntries = await NseSmoTrendlyneMmapping.findAll({
         attributes: ['nse_symbol']
       });
 
-      if (!nseEntries)
+      if (!nseSmoEntries)
       {
         console.log("No entries found in nse_trendlyne_mappings table.")
       } else
       {
-        nseToTrendlyneMappedSecurities = nseEntries.map(entry => entry.nse_symbol);
+        nseSmoToTrendlyneMappedSecurities = nseSmoEntries.map(entry => entry.nse_symbol);
       }
 
     } catch (error)
@@ -142,7 +142,7 @@ class NseTrendlyneScrapper extends Scrapper {
           break;
         }
 
-        if (!nseToTrendlyneMappedSecurities.includes(securities[i].symbol))
+        if (!nseSmoToTrendlyneMappedSecurities.includes(securities[i].symbol))
         {
           const securityName = securities[i].componyName;
           const encodedSecurityName = encodeURIComponent(securityName);
@@ -182,7 +182,7 @@ class NseTrendlyneScrapper extends Scrapper {
 
     try
     {
-      const fp = path.join(__dirname, '..', 'data', 'trendlyneNseStockIds.json');
+      const fp = path.join(__dirname, '..', 'data', 'trendlyneNseSmoStockIds.json');
       await fs.writeFile(fp, JSON.stringify(dataToInsert, null, 2));
       console.log('Trendlyne scrapped stock ids has been successfully written to trendlyneStockIds.json');
     } catch (error)
@@ -191,7 +191,7 @@ class NseTrendlyneScrapper extends Scrapper {
     }
     if (dataToInsert)
     {
-      webScrapToDb.insertNseTrendlyneData(NseTrendlyneMapping, dataToInsert, 100)
+      webScrapToDb.insertNseSmeTrendlyneData(NseSmoTrendlyneMmapping, dataToInsert, 100)
     } else
     {
       console.log("No data to insert in ")
