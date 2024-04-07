@@ -1,0 +1,16 @@
+const cron = require('node-cron');
+const BseTrendlyneScrapper = require('../scrapper/bseTrendlyneScrapper');
+
+cron.schedule('*/10 * * * *', async () => {
+  try
+  {
+    const scrapper = new BseTrendlyneScrapper();
+    await scrapper.scrap();
+  } catch (error)
+  {
+    console.error('Error during scraping:', error);
+  }
+}, {
+  scheduled: true,
+  timezone: 'Asia/Kolkata' // Set your desired timezone
+});
