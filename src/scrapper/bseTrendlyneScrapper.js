@@ -121,27 +121,34 @@ class BseTrendlyneScrapper extends Scrapper {
       var counter = 0;
       for (var i = 0; i < securities.length; i++)
       {
-        const securityName = securities[i].securityCode;
-        const query = `${securityName} site:trendlyne.com`;
-        const url = `https://www.google.com/search?q=${query}`
-        if (counter > 10)
+        if (!bseToTrendlyneMappedSecurities.includes(securities[i].bse_security_code))
         {
-          break;
-        }
-        try
-        {
-          const trendlyneStockId = await this.scrapStockId(page, url, securities[i].securityCode);
-          if (trendlyneStockId !== "NA")
-          {
-            await dataToInsert.push({
-              bse_security_code: securities[i].securityCode,
-              trendlyne_stock_id: trendlyneStockId
-            })
-          }
-        } catch (error)
-        {
-          console.error('Error:', error);
 
+          const securityName = securities[i].securityCode;
+          const encodedSecurityName = encodeURIComponent(securityName);
+          const query = `${encodedSecurityName} site:trendlyne.com`;
+          const url = `https://www.google.com/search?q=${query}`
+          if (counter > 10)
+          {
+            break;
+          }
+          try
+          {
+            const trendlyneStockId = await this.scrapStockId(page, url, securities[i].securityCode);
+            if (trendlyneStockId !== "NA")
+            {
+              await dataToInsert.push({
+                bse_security_code: securities[i].securityCode,
+                trendlyne_stock_id: trendlyneStockId
+              })
+              counter++;
+            }
+          } catch (error)
+          {
+            console.error('Error:', error);
+
+          }
+          await this.delay(4000);
         }
       }
     } catch (error)
@@ -169,5 +176,8 @@ class BseTrendlyneScrapper extends Scrapper {
   }
 }
 
-const scrapper = new BseTrendlyneScrapper();
-scrapper.scrap();
+// const scrapper = new BseTrendlyneScrapper();
+// scrapper.scrap();
+
+
+module.exports = BseTrendlyneScrapper;
